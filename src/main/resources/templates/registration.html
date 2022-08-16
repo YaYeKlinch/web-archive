@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="/fragments/head :: head"></head>
+<body>
+<div class="container">
+    <a th:text="#{registration.text }"></a>
+
+    <a th:text="${name}"></a>
+    <form th:action="@{/registration}"  method="POST" th:object="${user}" >
+        <div><label><a th:text="#{name.text}"/> <input  th:field="*{firstName}" />
+            <a th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Error</a>
+        </label></div>
+        <div><label> <a th:text="#{lastName.text}"/> <input  th:field="*{lastName}" />
+            <a th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Error</a></label></div>
+        <div><label> <a th:text="#{userName.text}"/> <input  th:field="*{email}" />
+            <a th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</a></label></div>
+        <div><label> <a th:text="#{password.text}"/> <input type="password"  th:field="*{password}" />
+            <a th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</a></label></div>
+        <div><label><input type="password" th:field="*{matchingPassword}" /></label></div>
+        <div><button class="btn" type="submit"  th:text="#{signUp.button}"></button></div>
+    </form>
+</div>
+</body>
+</html>

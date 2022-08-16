@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="/fragments/head :: head"></head>
+<body>
+<div class="container">
+  <div th:if="${param.error}">
+    <a th:text="#{errorParam.text}"></a>
+  </div>
+  <div th:if="${param.logout}">
+    <a th:text="#{logout.text}"></a>
+  </div>
+  <form th:action="@{/login}" method="post">
+    <div><label><a th:text="#{userName.text}" ></a> <input type="text" name="username"/> </label></div>
+    <div><label> <a th:text="#{password.text}" ></a> <input type="password" name="password"/> </label></div>
+    <div><button class="btn" type="submit"  th:text="#{signIn.button}"></button></div>
+  </form>
+  <a href="/registration" th:text="#{addNewUser.text}"></a>
+</div>
+</body>
+</html>
