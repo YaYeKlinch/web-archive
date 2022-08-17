@@ -33,6 +33,10 @@ public class ScientificWork {
 
     @NotNull
     @Column(nullable = false)
+    private String title;
+
+    @NotNull
+    @Column(nullable = false)
     private String annotation;
 
     @ManyToOne(fetch = FetchType.EAGER)
