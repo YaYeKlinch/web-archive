@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static com.klishch.diploma.constants.PaginationConstants.DEFAULT_PAGE_NUMBER;
+import static com.klishch.diploma.constants.PaginationConstants.DEFAULT_SIZE;
+
 @AllArgsConstructor
 @Service
 public class DefaultReviewService implements ReviewService {
-
-    private final static int DEFAULT_PAGE_NUMBER = 1;
-    private final static int DEFAULT_SIZE = 5;
 
     ReviewRepository reviewRepository;
 
@@ -55,7 +55,8 @@ public class DefaultReviewService implements ReviewService {
     }
 
     private PageRequest createPageRequest(Optional<Integer> page, Optional<Integer> size, Sort sort) {
-        return sort == null ? PageRequest.of(page.orElse(DEFAULT_PAGE_NUMBER) - 1, size.orElse(DEFAULT_SIZE)) :
+        return sort == null ?
+                PageRequest.of(page.orElse(DEFAULT_PAGE_NUMBER) - 1, size.orElse(DEFAULT_SIZE)) :
                 PageRequest.of(page.orElse(DEFAULT_PAGE_NUMBER) - 1, size.orElse(DEFAULT_SIZE), sort);
     }
 }

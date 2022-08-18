@@ -1,6 +1,5 @@
 package com.klishch.diploma.services.impl;
 
-
 import com.klishch.diploma.entities.ScientificWork;
 import com.klishch.diploma.entities.User;
 import com.klishch.diploma.repositories.ScientificWorkRepository;
@@ -13,12 +12,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.klishch.diploma.constants.PaginationConstants.DEFAULT_PAGE_NUMBER;
+import static com.klishch.diploma.constants.PaginationConstants.DEFAULT_SIZE;
+
 @Service
 @AllArgsConstructor
 public class DefaultScientificWorkService implements ScientificWorkService {
-
-    private final static int DEFAULT_PAGE_NUMBER = 1;
-    private final static int DEFAULT_SIZE = 5;
 
     ScientificWorkRepository scientificWorkRepository;
 
@@ -49,7 +48,8 @@ public class DefaultScientificWorkService implements ScientificWorkService {
     }
 
     private PageRequest createPageRequest(Optional<Integer> page, Optional<Integer> size, Sort sort) {
-        return sort == null ? PageRequest.of(page.orElse(DEFAULT_PAGE_NUMBER) - 1, size.orElse(DEFAULT_SIZE)) :
+        return sort == null ?
+                PageRequest.of(page.orElse(DEFAULT_PAGE_NUMBER) - 1, size.orElse(DEFAULT_SIZE)) :
                 PageRequest.of(page.orElse(DEFAULT_PAGE_NUMBER) - 1, size.orElse(DEFAULT_SIZE), sort);
     }
 
