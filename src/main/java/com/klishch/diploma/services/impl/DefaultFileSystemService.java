@@ -5,6 +5,7 @@ import com.klishch.diploma.exceptions.UploadFileException;
 import com.klishch.diploma.services.FileSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,7 +24,6 @@ public class DefaultFileSystemService implements FileSystemService {
     public DefaultFileSystemService(StorageProperties properties) {
         this.root = Paths.get(properties.getLocation());
     }
-
 
     @Override
     public void store(MultipartFile file) {
@@ -47,5 +47,14 @@ public class DefaultFileSystemService implements FileSystemService {
         }
     }
 
+    @Override
+    public void init() {
+        try {
+            Files.createDirectories(root);
+        }
+        catch (IOException e) {
+            throw new UploadFileException("Could not initialize storage", e);
+        }
+    }
 
 }

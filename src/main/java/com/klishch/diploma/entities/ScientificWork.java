@@ -19,9 +19,12 @@ public class ScientificWork {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column()
+    private LocalDateTime publishDate;
+
     @NotNull
     @Column(nullable = false)
-    private LocalDateTime publishDate;
+    private LocalDateTime sendingDate;
 
     @NotNull
     @Column(nullable = false)
