@@ -1,6 +1,7 @@
 package com.klishch.diploma.services;
 
 
+import com.klishch.diploma.dto.ScientificWorkDto;
 import com.klishch.diploma.entities.ScientificWork;
 import com.klishch.diploma.entities.User;
 import org.springframework.data.domain.Page;
@@ -21,4 +22,6 @@ public interface ScientificWorkService {
 
     Page<ScientificWork> findScientificWorkByUsersLastName(Optional<Integer> page, Optional<Integer> size,
                                                            Sort sort, User user);
+
+    ScientificWork createWork(ScientificWorkDto scientificWorkDto, User user);
 }

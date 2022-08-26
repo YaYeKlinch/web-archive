@@ -1,8 +1,10 @@
 package com.klishch.diploma.services.impl;
 
+import com.klishch.diploma.dto.ScientificWorkDto;
 import com.klishch.diploma.entities.ScientificWork;
 import com.klishch.diploma.entities.User;
 import com.klishch.diploma.repositories.ScientificWorkRepository;
+import com.klishch.diploma.services.FileSystemService;
 import com.klishch.diploma.services.ScientificWorkService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.klishch.diploma.constants.PaginationConstants.DEFAULT_PAGE_NUMBER;
@@ -20,6 +23,7 @@ import static com.klishch.diploma.constants.PaginationConstants.DEFAULT_SIZE;
 public class DefaultScientificWorkService implements ScientificWorkService {
 
     ScientificWorkRepository scientificWorkRepository;
+    FileSystemService fileSystemService;
 
     @Override
     public Page<ScientificWork> findScientificWorksByTitle(Optional<Integer> page, Optional<Integer> size,
@@ -45,6 +49,18 @@ public class DefaultScientificWorkService implements ScientificWorkService {
                                                                   Sort sort, User user) {
         return scientificWorkRepository.findScientificWorksByUserLastNameContaining(createPageRequest(page, size, sort),
                 user.getLastName());
+    }
+
+    @Override
+    public ScientificWork createWork(ScientificWorkDto scientificWorkDto, User user) {
+        ScientificWork scientificWork = new ScientificWork();
+        scientificWork.setTitle(scientificWorkDto.getTitle());
+        scientificWork.setAnnotation(scientificWorkDto.getAnnotation());
+        scientificWork.setPublished(false);
+        scientificWork.setSendingDate(LocalDateTime.now());
+        scientificWork.setUser(user);
+        scientificWork.setFilePath(fileSystemService.store(scientificWorkDto.getFile()));
+        return scientificWorkRepository.save(scientificWork);
     }
 
     private PageRequest createPageRequest(Optional<Integer> page, Optional<Integer> size, Sort sort) {

@@ -6,6 +6,6 @@ public interface FileSystemService {
 
     void init();
 
-    void store(MultipartFile file);
+    String store(MultipartFile file);
 
 }
