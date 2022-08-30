@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -28,14 +30,15 @@ public class ScientificWorkController {
 
     @PostMapping("/upload-work")
     public String uploadWork(@AuthenticationPrincipal User user,
+                             @RequestParam("file") MultipartFile file,
                              @Valid ScientificWorkDto scientificWorkDto,
                              BindingResult bindingResult,
                              Model model){
-        if(bindingResult.hasErrors()){
+        if(bindingResult.hasErrors() || file.isEmpty()){
             model.addAttribute("work", scientificWorkDto);
             return "uploadWork";
         }
-        scientificWorkService.createWork(scientificWorkDto, user);
+        scientificWorkService.createWork(scientificWorkDto, user, file);
         model.addAttribute("work", scientificWorkDto);
         return "redirect:/";
     }

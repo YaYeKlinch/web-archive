@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -52,14 +53,14 @@ public class DefaultScientificWorkService implements ScientificWorkService {
     }
 
     @Override
-    public ScientificWork createWork(ScientificWorkDto scientificWorkDto, User user) {
+    public ScientificWork createWork(ScientificWorkDto scientificWorkDto, User user, MultipartFile file) {
         ScientificWork scientificWork = new ScientificWork();
         scientificWork.setTitle(scientificWorkDto.getTitle());
         scientificWork.setAnnotation(scientificWorkDto.getAnnotation());
         scientificWork.setPublished(false);
         scientificWork.setSendingDate(LocalDateTime.now());
         scientificWork.setUser(user);
-        scientificWork.setFilePath(fileSystemService.store(scientificWorkDto.getFile()));
+        scientificWork.setFilePath(fileSystemService.store(file));
         return scientificWorkRepository.save(scientificWork);
     }
 

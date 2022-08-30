@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -11,19 +12,17 @@ import javax.validation.constraints.NotNull;
 public class ScientificWorkDto {
 
     @NotNull
+    @NotBlank
     private String title;
 
     @NotNull
+    @NotBlank
     private String annotation;
-
-    @NotNull
-    private MultipartFile file;
 
     public ScientificWorkDto(){}
 
-    public ScientificWorkDto(@NotNull String title, @NotNull String annotation, @NotNull MultipartFile file){
+    public ScientificWorkDto(@NotNull @NotBlank String title, @NotNull @NotBlank String annotation){
         this.title = title;
         this.annotation = annotation;
-        this.file = file;
     }
 }
