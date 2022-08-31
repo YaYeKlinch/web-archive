@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="/fragments/head :: head"></head>
+<body>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col" >Annotation</th>
+            <th scope="col">Title</th>
+            <th scope="col" >Send date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <td>
+            <a class="btn btn-outline-primary" th:href="@{/your-works(sort='DESC', nameBy='sendingDate')}" >desc</a>
+            <a class="btn btn-outline-primary" th:href="@{/your-works(sort='ASC', nameBy='sendingDate')}"  >asc</a>
+        </td>
+        <tr scope="row" th:each="work : ${works.content}">
+            <td th:text="${#temporals.format(work.sendingDate, 'dd-MM-yyyy HH:mm')}"> </td>
+            <td th:text="${work.annotation}"> </td>
+            <td th:text="${work.title}"> </td>
+        </tr>
+        </tbody>
+    </table>
+    <ul th:if="${works.totalPages > 0}" class="nav nav-tabs justify-content-center">
+        <li class="nav-item"  th:each="pageNumber : ${pageNumbers}">
+            <a th:href="@{/your-works(size=${works.size}, page=${pageNumber} , sort=${sort}, nameBy=${nameBy})}"
+               th:text=${pageNumber}
+               th:class="${pageNumber==works.number + 1} ? active"></a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

@@ -1,9 +1,12 @@
 package com.klishch.diploma.controllers;
 
 import com.klishch.diploma.dto.ScientificWorkDto;
+import com.klishch.diploma.entities.ScientificWork;
 import com.klishch.diploma.entities.User;
 import com.klishch.diploma.services.ScientificWorkService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -43,5 +47,19 @@ public class ScientificWorkController {
         return "redirect:/";
     }
 
+    @GetMapping("/your-works")
+    public String getUsersOrdersPage(@RequestParam("page") Optional<Integer> page,
+                                     @RequestParam("size") Optional<Integer> size,
+                                     @RequestParam(value = "sort", required = false) String sortBy,
+                                     @RequestParam(value = "nameBy", required = false) String nameBy,
+                                     @AuthenticationPrincipal User user,
+                                     Model model){
+        Sort sort = ControllerUtils.getSort(sortBy , nameBy , model);
+        Page<ScientificWork> works = scientificWorkService.findScientificWorkByUser(page,size,sort,user);
+        int totalPages = works.getTotalPages();
+        ControllerUtils.pageNumberCounts(totalPages , model);
+        model.addAttribute("works", works);
+        return "userWorks";
+    }
 
 }
