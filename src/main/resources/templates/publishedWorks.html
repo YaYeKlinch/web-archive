@@ -14,8 +14,8 @@
         </thead>
         <tbody>
         <td>
-            <a class="btn btn-outline-primary" th:href="@{/your-works(sort='DESC', nameBy='sendingDate')}" >desc</a>
-            <a class="btn btn-outline-primary" th:href="@{/your-works(sort='ASC', nameBy='sendingDate')}"  >asc</a>
+            <a class="btn btn-outline-primary" th:href="@{/published-works(sort='DESC', nameBy='sendingDate')}" >desc</a>
+            <a class="btn btn-outline-primary" th:href="@{/published-works(sort='ASC', nameBy='sendingDate')}"  >asc</a>
         </td>
         <tr scope="row" th:each="work : ${works.content}">
             <td th:text="${#temporals.format(work.sendingDate, 'dd-MM-yyyy HH:mm')}"> </td>
@@ -26,7 +26,7 @@
     </table>
     <ul th:if="${works.totalPages > 0}" class="nav nav-tabs justify-content-center">
         <li class="nav-item"  th:each="pageNumber : ${pageNumbers}">
-            <a th:href="@{/your-works(size=${works.size}, page=${pageNumber} , sort=${sort}, nameBy=${nameBy})}"
+            <a th:href="@{/published-works(size=${works.size}, page=${pageNumber} , sort=${sort}, nameBy=${nameBy})}"
                th:text=${pageNumber}
                th:class="${pageNumber==works.number + 1} ? active"></a>
         </li>

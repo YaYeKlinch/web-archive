@@ -48,7 +48,7 @@ public class ScientificWorkController {
     }
 
     @GetMapping("/your-works")
-    public String getUsersOrdersPage(@RequestParam("page") Optional<Integer> page,
+    public String getUsersWorksPage (@RequestParam("page") Optional<Integer> page,
                                      @RequestParam("size") Optional<Integer> size,
                                      @RequestParam(value = "sort", required = false) String sortBy,
                                      @RequestParam(value = "nameBy", required = false) String nameBy,
@@ -60,6 +60,34 @@ public class ScientificWorkController {
         ControllerUtils.pageNumberCounts(totalPages , model);
         model.addAttribute("works", works);
         return "userWorks";
+    }
+
+    @GetMapping("/new-works")
+    public String getAllNotPublishedPage(@RequestParam("page") Optional<Integer> page,
+                                         @RequestParam("size") Optional<Integer> size,
+                                         @RequestParam(value = "sort", required = false) String sortBy,
+                                         @RequestParam(value = "nameBy", required = false) String nameBy,
+                                         Model model) {
+        Sort sort = ControllerUtils.getSort(sortBy, nameBy, model);
+        Page<ScientificWork> works = scientificWorkService.findScientificWorkByPublishing(page, size, sort, false);
+        int totalPages = works.getTotalPages();
+        ControllerUtils.pageNumberCounts(totalPages, model);
+        model.addAttribute("works", works);
+        return "newWorks";
+    }
+
+    @GetMapping("/published-works")
+    public String getAllPublishedWorksPage(@RequestParam("page") Optional<Integer> page,
+                                           @RequestParam("size") Optional<Integer> size,
+                                           @RequestParam(value = "sort", required = false) String sortBy,
+                                           @RequestParam(value = "nameBy", required = false) String nameBy,
+                                           Model model){
+        Sort sort = ControllerUtils.getSort(sortBy , nameBy , model);
+        Page<ScientificWork> works = scientificWorkService.findScientificWorkByPublishing(page,size,sort,true);
+        int totalPages = works.getTotalPages();
+        ControllerUtils.pageNumberCounts(totalPages , model);
+        model.addAttribute("works", works);
+        return "publishedWorks";
     }
 
 }
