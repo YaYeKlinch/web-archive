@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface ReviewRepository extends PagingAndSortingRepository<Review,Long> {
 
-    @Query("SELECT r FROM Review AS r WHERE r.work = ?1")
+    @Query("SELECT r FROM Review AS r WHERE r.work.id = ?1")
     Page<Review> findReviewsByScientificWorkId(Pageable pageable, @Param("scientific_work_id") Long workId);
 }
