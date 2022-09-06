@@ -4,12 +4,13 @@
 <head th:replace="/fragments/head :: head"></head>
 <body>
 <div class="container">
+    <header th:replace="/fragments/navbar :: navbar"></header>
     <table class="table">
         <thead>
         <tr>
             <th scope="col" >Send date</th>
             <th scope="col" >Annotation</th>
-            <th scope="col">Title</th>
+            <th scope="col" th:text="#{title.work}"></th>
         </tr>
         </thead>
         <tbody>

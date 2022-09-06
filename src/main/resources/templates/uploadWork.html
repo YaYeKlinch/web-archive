@@ -4,6 +4,7 @@
 <head th:replace="/fragments/head :: head"></head>
 <body>
 <div class="container">
+    <header th:replace="/fragments/navbar :: navbar"></header>
     <form th:action="@{/upload-work}"  method="POST"  enctype="multipart/form-data">
         <div>
             <input type="text" th:name="title" th:value="${work.title}"/>
