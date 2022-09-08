@@ -8,15 +8,15 @@
     <table class="table">
         <thead>
         <tr>
-            <th scope="col" >Send date</th>
-            <th scope="col" >Annotation</th>
+            <th scope="col" th:text="#{send.date.work}">></th>
             <th scope="col" th:text="#{title.work}"></th>
+            <th scope="col" th:text="#{annotation.work}"></th>
         </tr>
         </thead>
         <tbody>
         <td>
-            <a class="btn btn-outline-primary" th:href="@{/your-works(sort='DESC', nameBy='sendingDate')}" >desc</a>
-            <a class="btn btn-outline-primary" th:href="@{/your-works(sort='ASC', nameBy='sendingDate')}"  >asc</a>
+            <a class="btn btn-outline-primary" th:href="@{/your-works(sort='DESC', nameBy='sendingDate')}" th:text="#{sort.descending}"></a>
+            <a class="btn btn-outline-primary" th:href="@{/your-works(sort='ASC', nameBy='sendingDate')}"  th:text="#{sort.ascending}" ></a>
         </td>
         <tr scope="row" th:each="work : ${works.content}">
             <td th:text="${#temporals.format(work.sendingDate, 'dd-MM-yyyy HH:mm')}"> </td>

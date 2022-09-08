@@ -7,15 +7,18 @@
     <header th:replace="/fragments/navbar :: navbar"></header>
     <form th:action="@{/upload-work}"  method="POST"  enctype="multipart/form-data">
         <div>
+            <a th:text="#{title.work}"/>
             <input type="text" th:name="title" th:value="${work.title}"/>
         </div>
         <div>
+            <a th:text="#{annotation.work}"/>
             <input type="text" th:name="annotation" th:value="${work.annotation}"/>
         </div>
         <div>
+            <a th:text="#{file.work}"/>
             <input type="file" name="file" />
         </div>
-        <div><button class="btn" type="submit"   th:text="#{signUp.button}"></button></div>
+        <div><button class="btn" type="submit"   th:text="#{upload.button}"></button></div>
     </form>
 </div>
 </body>
