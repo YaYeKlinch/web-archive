@@ -55,7 +55,7 @@ public class ReviewController {
     }
 
     @PostMapping("/published-works/{work}/create-review")
-    public String uploadWork(@AuthenticationPrincipal User user,
+    public String createReview(@AuthenticationPrincipal User user,
                              @PathVariable("work") ScientificWork scientificWork,
                              @Valid ReviewDto reviewDto,
                              BindingResult bindingResult,
@@ -66,7 +66,35 @@ public class ReviewController {
             return "createReview";
         }
         reviewService.createReview(reviewDto,user,scientificWork);
-        model.addAttribute("review", reviewDto);
         return "redirect:/published-works/{work}";
     }
+
+    @GetMapping("/published-works/{work}/update-review/{review}")
+    public String getUpdateReviewPage(@PathVariable("work") ScientificWork scientificWork,
+                                      @PathVariable("review") Review review,
+                                      Model model){
+        model.addAttribute("work",scientificWork.getId());
+        ReviewDto reviewDto = new ReviewDto(review.getText(), review.getRate());
+        model.addAttribute("review", reviewDto);
+        model.addAttribute("reviewId", review.getId());
+        return "updateReview";
+    }
+
+    @PostMapping("/published-works/{work}/update-review/{review}")
+    public String updateReview(@AuthenticationPrincipal User user,
+                             @PathVariable("work") ScientificWork scientificWork,
+                             @PathVariable("review") Review review,
+                             @Valid ReviewDto reviewDto,
+                             BindingResult bindingResult,
+                             Model model){
+        if(bindingResult.hasErrors()){
+            model.addAttribute("work",scientificWork.getId());
+            model.addAttribute("review", reviewDto);
+            model.addAttribute("reviewId", review.getId());
+            return "updateReview";
+        }
+        reviewService.updateReview(reviewDto, review);
+        return "redirect:/published-works/{work}";
+    }
+
 }
