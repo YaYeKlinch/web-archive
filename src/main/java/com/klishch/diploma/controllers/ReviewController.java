@@ -97,4 +97,9 @@ public class ReviewController {
         return "redirect:/published-works/{work}";
     }
 
+    @GetMapping("/published-works/{work}/delete-review/{review}")
+    public String deleteReview(@PathVariable("review") Review review){
+        reviewService.deleteReview(review);
+        return "redirect:/published-works/{work}";
+    }
 }

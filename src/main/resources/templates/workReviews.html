@@ -22,6 +22,7 @@
             <td th:text="${review.text}"> </td>
             <td th:text="${review.rate}"> </td>
             <td th:text="${review.user.username}"> </td>
+            <td><a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/delete-review/${review.id}|}" th:text="#{delete.button}"></a></td>
         </tr>
         </tbody>
     </table>
