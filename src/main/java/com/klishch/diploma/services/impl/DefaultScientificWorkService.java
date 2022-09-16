@@ -64,6 +64,13 @@ public class DefaultScientificWorkService implements ScientificWorkService {
         return scientificWorkRepository.save(scientificWork);
     }
 
+    @Override
+    public void changeScientificWorkPublishStatus(ScientificWork scientificWork) {
+        scientificWork.setPublishDate(LocalDateTime.now());
+        scientificWork.setPublished(!scientificWork.isPublished());
+        scientificWorkRepository.save(scientificWork);
+    }
+
     private PageRequest createPageRequest(Optional<Integer> page, Optional<Integer> size, Sort sort) {
         return sort == null ?
                 PageRequest.of(page.orElse(DEFAULT_PAGE_NUMBER) - 1, size.orElse(DEFAULT_SIZE)) :

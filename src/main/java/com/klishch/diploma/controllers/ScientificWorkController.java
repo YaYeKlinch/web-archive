@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,6 +75,12 @@ public class ScientificWorkController {
         ControllerUtils.pageNumberCounts(totalPages, model);
         model.addAttribute("works", works);
         return "newWorks";
+    }
+
+    @GetMapping("/new-works/publish-work/{work}")
+    public String publishWork(@PathVariable("work") ScientificWork scientificWork){
+        scientificWorkService.changeScientificWorkPublishStatus(scientificWork);
+        return scientificWork.isPublished() ? "redirect:/new-works" : "redirect:/published-works";
     }
 
     @GetMapping("/published-works")

@@ -25,4 +25,6 @@ public interface ScientificWorkService {
                                                            Sort sort, User user);
 
     ScientificWork createWork(ScientificWorkDto scientificWorkDto, User user, MultipartFile file);
+
+    void changeScientificWorkPublishStatus(ScientificWork scientificWork);
 }
