@@ -88,13 +88,21 @@ public class ScientificWorkController {
                                            @RequestParam("size") Optional<Integer> size,
                                            @RequestParam(value = "sort", required = false) String sortBy,
                                            @RequestParam(value = "nameBy", required = false) String nameBy,
+                                           @RequestParam(value = "title", required = false) String title,
                                            Model model){
         Sort sort = ControllerUtils.getSort(sortBy , nameBy , model);
-        Page<ScientificWork> works = scientificWorkService.findScientificWorkByPublishing(page,size,sort,true);
+        String actualTitle = ControllerUtils.getStringField(title);
+        model.addAttribute("title", actualTitle);
+        Page<ScientificWork> works = chooseFindWorkMethod(actualTitle, page, size, sort);
         int totalPages = works.getTotalPages();
         ControllerUtils.pageNumberCounts(totalPages , model);
         model.addAttribute("works", works);
         return "publishedWorks";
     }
-
+    private Page<ScientificWork> chooseFindWorkMethod(String title,
+                                                      Optional<Integer> page, Optional<Integer> size, Sort sort) {
+        return title.isBlank()  ?
+                scientificWorkService.findScientificWorkByPublishing(page, size, sort, true) :
+                scientificWorkService.findScientificWorksByTitle(page, size, sort, title);
+    }
 }

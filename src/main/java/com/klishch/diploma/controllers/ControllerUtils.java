@@ -29,4 +29,8 @@ public class ControllerUtils {
     public static Sort.Direction getSortType(String type){
         return type == null || type.isEmpty() ? Sort.DEFAULT_DIRECTION : Sort.Direction.valueOf(type);
     }
+
+    public static String getStringField(String field){
+     return field!=null && !field.isEmpty() ? field : "";
+    }
 }

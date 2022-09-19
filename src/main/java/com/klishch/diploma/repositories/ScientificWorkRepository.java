@@ -10,7 +10,7 @@ public interface ScientificWorkRepository extends PagingAndSortingRepository<Sci
 
     Page<ScientificWork> findScientificWorksByIsPublished(Pageable pageable, @Param("is_published") boolean isPublished);
 
-    Page<ScientificWork> findScientificWorksByTitle(Pageable pageable, @Param("title") String title);
+    Page<ScientificWork> findScientificWorksByTitleContainingAndIsPublished(Pageable pageable, @Param("title") String title, @Param("is_published") boolean isPublished);
 
     Page<ScientificWork> findScientificWorksByUserLastNameContaining(Pageable pageable, String lastName);
 

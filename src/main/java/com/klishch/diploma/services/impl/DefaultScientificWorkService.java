@@ -23,13 +23,15 @@ import static com.klishch.diploma.constants.PaginationConstants.DEFAULT_SIZE;
 @AllArgsConstructor
 public class DefaultScientificWorkService implements ScientificWorkService {
 
+    public static final boolean PUBLISHED = true;
     ScientificWorkRepository scientificWorkRepository;
     FileSystemService fileSystemService;
 
     @Override
     public Page<ScientificWork> findScientificWorksByTitle(Optional<Integer> page, Optional<Integer> size,
                                                            Sort sort, String title) {
-        return scientificWorkRepository.findScientificWorksByTitle(createPageRequest(page, size, sort), title);
+        return scientificWorkRepository
+                .findScientificWorksByTitleContainingAndIsPublished(createPageRequest(page, size, sort), title, PUBLISHED);
     }
 
     @Override
