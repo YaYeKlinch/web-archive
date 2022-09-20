@@ -7,13 +7,14 @@
     <header th:replace="/fragments/navbar :: navbar"></header>
     <div th:text="${work.title}"></div>
     <div th:text="${work.annotation}"></div>
+    <a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/create-review|}" th:text="#{create.review.button}"/>
     <table class="table">
         <thead>
         <tr>
             <th scope="col" th:text="#{date.review}"></th>
-            <th scope="col" th:text="#{text.review}">Text</th>
-            <th scope="col" th:text="#{rate.review}">Rate</th>
-            <th scope="col" th:text="#{user.review}">User</th>
+            <th scope="col" th:text="#{text.review}"></th>
+            <th scope="col" th:text="#{rate.review}"></th>
+            <th scope="col" th:text="#{user.review}"></th>
         </tr>
         </thead>
         <tbody>
@@ -22,6 +23,7 @@
             <td th:text="${review.text}"> </td>
             <td th:text="${review.rate}"> </td>
             <td th:text="${review.user.username}"> </td>
+            <td><a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/update-review/${review.id}|}" th:text="#{update.button}"></a></td>
             <td><a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/delete-review/${review.id}|}" th:text="#{delete.button}"></a></td>
         </tr>
         </tbody>
