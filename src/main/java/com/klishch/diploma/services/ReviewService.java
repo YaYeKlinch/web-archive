@@ -7,6 +7,7 @@ import com.klishch.diploma.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReviewService {
@@ -17,6 +18,7 @@ public interface ReviewService {
 
     void deleteReview(Review review);
 
-    Page<Review> findReviewsByWork(Optional<Integer> page, Optional<Integer> size,
-                                   Sort sort, ScientificWork scientificWork);
+    Page<Review> findReviewsByWorkPageable(Optional<Integer> page, Optional<Integer> size,
+                                           Sort sort, ScientificWork scientificWork);
+    List<Review> findReviewsByWork(ScientificWork scientificWork);
 }

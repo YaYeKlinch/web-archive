@@ -7,6 +7,7 @@ import com.klishch.diploma.services.ScientificWorkService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -63,6 +65,7 @@ public class ScientificWorkController {
         return "userWorks";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/new-works")
     public String getAllNotPublishedPage(@RequestParam("page") Optional<Integer> page,
                                          @RequestParam("size") Optional<Integer> size,
@@ -77,11 +80,13 @@ public class ScientificWorkController {
         return "newWorks";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/new-works/publish-work/{work}")
     public String publishWork(@PathVariable("work") ScientificWork scientificWork){
         scientificWorkService.changeScientificWorkPublishStatus(scientificWork);
         return scientificWork.isPublished() ? "redirect:/new-works" : "redirect:/published-works";
     }
+
 
     @GetMapping("/published-works")
     public String getAllPublishedWorksPage(@RequestParam("page") Optional<Integer> page,
@@ -105,4 +110,5 @@ public class ScientificWorkController {
                 scientificWorkService.findScientificWorkByPublishing(page, size, sort, true) :
                 scientificWorkService.findScientificWorksByTitle(page, size, sort, title);
     }
+
 }

@@ -7,7 +7,13 @@
     <header th:replace="/fragments/navbar :: navbar"></header>
     <div th:text="${work.title}"></div>
     <div th:text="${work.annotation}"></div>
+
+    <div th:if="${reviewCreated}">
+        <a th:text="#{created.review.message}"/>
+    </div>
+    <div th:unless="${reviewCreated}">
     <a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/create-review|}" th:text="#{create.review.button}"/>
+    </div>
     <table class="table">
         <thead>
         <tr>
@@ -23,8 +29,12 @@
             <td th:text="${review.text}"> </td>
             <td th:text="${review.rate}"> </td>
             <td th:text="${review.user.username}"> </td>
+            <div  th:if="${review.user.id}==${userId}">
             <td><a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/update-review/${review.id}|}" th:text="#{update.button}"></a></td>
+            </div>
+            <div  th:if="${review.user.id}==${userId}">
             <td><a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/delete-review/${review.id}|}" th:text="#{delete.button}"></a></td>
+            </div>
         </tr>
         </tbody>
     </table>

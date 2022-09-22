@@ -17,7 +17,7 @@
                     <a class="nav-link" aria-current="page" href="/your-works" th:text="#{user.works.link}"></a>
                 </li>
                 </div>
-                <div th:if="${#authorization.expression('isAuthenticated()')}">
+                <div sec:authorize="hasAuthority('ADMIN')" th:if="${#authorization.expression('isAuthenticated()')}">
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="/new-works" th:text="#{new.works.link}"></a>
                 </li>

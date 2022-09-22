@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static com.klishch.diploma.constants.PaginationConstants.DEFAULT_PAGE_NUMBER;
@@ -48,10 +49,15 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public Page<Review> findReviewsByWork(Optional<Integer> page, Optional<Integer> size,
-                                          Sort sort, ScientificWork scientificWork) {
-        return reviewRepository.findReviewsByScientificWorkId(createPageRequest(page, size, sort),
+    public Page<Review> findReviewsByWorkPageable(Optional<Integer> page, Optional<Integer> size,
+                                                  Sort sort, ScientificWork scientificWork) {
+        return reviewRepository.findReviewsByScientificWorkIdPageable(createPageRequest(page, size, sort),
                 scientificWork.getId());
+    }
+
+    @Override
+    public List<Review> findReviewsByWork(ScientificWork scientificWork) {
+        return reviewRepository.findReviewsByScientificWorkId(scientificWork.getId());
     }
 
     private PageRequest createPageRequest(Optional<Integer> page, Optional<Integer> size, Sort sort) {

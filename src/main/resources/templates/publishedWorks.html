@@ -27,7 +27,9 @@
             <td th:text="${work.annotation}"> </td>
             <td th:text="${work.title}"> </td>
             <td><a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}|}" th:text="#{details.work}"></a></td>
+            <div sec:authorize="hasAuthority('ADMIN')" th:if="${#authorization.expression('isAuthenticated()')}">
             <td><a class="btn btn-outline-primary" th:href="@{|/new-works/publish-work/${work.id}|}" th:text="#{depublish.button}"></a></td>
+            </div>
         </tr>
         </tbody>
     </table>

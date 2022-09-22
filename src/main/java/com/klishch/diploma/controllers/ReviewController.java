@@ -1,7 +1,6 @@
 package com.klishch.diploma.controllers;
 
 import com.klishch.diploma.dto.ReviewDto;
-import com.klishch.diploma.dto.ScientificWorkDto;
 import com.klishch.diploma.entities.Review;
 import com.klishch.diploma.entities.ScientificWork;
 import com.klishch.diploma.entities.User;
@@ -10,6 +9,7 @@ import com.klishch.diploma.services.ScientificWorkService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,15 +30,18 @@ public class ReviewController {
     ScientificWorkService scientificWorkService;
 
     @GetMapping("/published-works/{work}")
-    public String getWorkPage(@RequestParam("page") Optional<Integer> page,
+    public String getWorkPage(@AuthenticationPrincipal User user,
+                              @RequestParam("page") Optional<Integer> page,
                               @RequestParam("size") Optional<Integer> size,
                               @RequestParam(value = "sort", required = false) String sortBy,
                               @RequestParam(value = "nameBy", required = false) String nameBy,
                               @PathVariable("work") ScientificWork scientificWork,
                               Model model){
         model.addAttribute("work",scientificWork);
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("reviewCreated", isUserCreatedReviewForWork(user,scientificWork));
         Sort sort = ControllerUtils.getSort(sortBy , nameBy , model);
-        Page<Review> reviews = reviewService.findReviewsByWork(page, size, sort, scientificWork);
+        Page<Review> reviews = reviewService.findReviewsByWorkPageable(page, size, sort, scientificWork);
         int totalPages = reviews.getTotalPages();
         ControllerUtils.pageNumberCounts(totalPages , model);
         model.addAttribute("reviews", reviews);
@@ -46,12 +49,13 @@ public class ReviewController {
     }
 
     @GetMapping("/published-works/{work}/create-review")
-    public String getCreateReviewPage(@PathVariable("work") ScientificWork scientificWork,
+    public String getCreateReviewPage(@AuthenticationPrincipal User user,
+                                      @PathVariable("work") ScientificWork scientificWork,
                                       Model model){
         model.addAttribute("work",scientificWork.getId());
         ReviewDto reviewDto = new ReviewDto();
         model.addAttribute("review", reviewDto);
-        return "createReview";
+        return isUserCreatedReviewForWork(user, scientificWork) ? "redirect:/published-works/{work}" : "createReview";
     }
 
     @PostMapping("/published-works/{work}/create-review")
@@ -69,6 +73,7 @@ public class ReviewController {
         return "redirect:/published-works/{work}";
     }
 
+    @PreAuthorize("#review.getUser().getUsername() == authentication.principal.username")
     @GetMapping("/published-works/{work}/update-review/{review}")
     public String getUpdateReviewPage(@PathVariable("work") ScientificWork scientificWork,
                                       @PathVariable("review") Review review,
@@ -80,9 +85,9 @@ public class ReviewController {
         return "updateReview";
     }
 
+    @PreAuthorize("#review.getUser().getUsername() == authentication.principal.username")
     @PostMapping("/published-works/{work}/update-review/{review}")
-    public String updateReview(@AuthenticationPrincipal User user,
-                             @PathVariable("work") ScientificWork scientificWork,
+    public String updateReview(@PathVariable("work") ScientificWork scientificWork,
                              @PathVariable("review") Review review,
                              @Valid ReviewDto reviewDto,
                              BindingResult bindingResult,
@@ -97,9 +102,15 @@ public class ReviewController {
         return "redirect:/published-works/{work}";
     }
 
+    @PreAuthorize("#review.getUser().getUsername() == authentication.principal.username")
     @GetMapping("/published-works/{work}/delete-review/{review}")
     public String deleteReview(@PathVariable("review") Review review){
         reviewService.deleteReview(review);
         return "redirect:/published-works/{work}";
+    }
+
+    private boolean isUserCreatedReviewForWork(User user, ScientificWork work){
+        return reviewService.findReviewsByWork(work).stream()
+                .anyMatch(review -> review.getUser().getId().equals(user.getId()));
     }
 }
