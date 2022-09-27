@@ -4,9 +4,7 @@
 <head th:replace="/fragments/head :: head"></head>
 <body>
 <div class="container">
-    <div class="row justify-content-center">
-    <a th:text="#{registration.text }"></a>
-    </div>
+    <a th:text="#{registration.text }" class="row justify-content-center"></a>
     <a th:text="${name}"></a>
     <form th:action="@{/registration}"  method="POST" th:object="${user}" class="col-lg-6 offset-lg-3 ">
         <div class="row justify-content-center">
