@@ -14,30 +14,37 @@
     <div th:unless="${reviewCreated}">
     <a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/create-review|}" th:text="#{create.review.button}"/>
     </div>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col" th:text="#{date.review}"></th>
-            <th scope="col" th:text="#{text.review}"></th>
-            <th scope="col" th:text="#{rate.review}"></th>
-            <th scope="col" th:text="#{user.review}"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr scope="row" th:each="review : ${reviews.content}">
-            <td th:text="${#temporals.format(review.date, 'dd-MM-yyyy HH:mm')}"> </td>
-            <td th:text="${review.text}"> </td>
-            <td th:text="${review.rate}"> </td>
-            <td th:text="${review.user.username}"> </td>
-            <div  th:if="${review.user.id}==${userId}">
-            <td><a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/update-review/${review.id}|}" th:text="#{update.button}"></a></td>
+    <div class="card w-100" th:each="review : ${reviews.content}">
+        <hr color="blue"  width="100%" size="10">
+            <div class="card-body p-4">
+                <div class="">
+                    <div class="d-flex flex-row align-items-center">
+                        <h5 th:text="${review.user.firstName}"> </h5>
+                        <h5>&nbsp; </h5>
+                        <h5 th:text="${review.user.lastName}"> </h5>
+                    </div>
+                    <p class="small" th:text="${#temporals.format(review.date, 'dd-MM-yyyy HH:mm')}"></p>
+                    <p th:text="${review.text}"></p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex flex-row align-items-center">
+                        <h5 th:text="#{rate.review}"></h5>
+                        <h5> &nbsp;</h5>
+                        <h5 th:text="${review.rate}"></h5>
+                        <h5>/5</h5>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div  th:if="${review.user.id}==${userId}">
+                            <a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/update-review/${review.id}|}" th:text="#{update.button}"></a>
+                        </div>
+                        <h5> &nbsp;</h5>
+                        <div  th:if="${review.user.id}==${userId}">
+                            <a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/delete-review/${review.id}|}" th:text="#{delete.button}"></a>
+                        </div>
+                    </div>
             </div>
-            <div  th:if="${review.user.id}==${userId}">
-            <td><a class="btn btn-outline-primary" th:href="@{|/published-works/${work.id}/delete-review/${review.id}|}" th:text="#{delete.button}"></a></td>
-            </div>
-        </tr>
-        </tbody>
-    </table>
+        </div>
+    </div>
     <ul th:if="${reviews.totalPages > 0}" class="nav nav-tabs justify-content-center">
         <li class="nav-item"  th:each="pageNumber : ${pageNumbers}">
             <a th:href="@{/published-works/{work}(work=${work.id}, size=${reviews.size}, page=${pageNumber} , sort=${sort}, nameBy=${nameBy})}"
