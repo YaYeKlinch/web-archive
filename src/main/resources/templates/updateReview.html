@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="/fragments/head :: head"></head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <div class="container">
     <header th:replace="/fragments/navbar :: navbar"></header>
     <form th:action="@{|/published-works/${work}/update-review/${reviewId}|}"  method="POST" class="col-lg-6 offset-lg-3 ">
@@ -14,6 +14,9 @@
         <div><button class="btn" type="submit"   th:text="#{update.button}"></button></div>
         </div>
     </form>
+</div>
+<div class="container mt-auto">
+    <footer th:replace="/fragments/footer :: footer"></footer>
 </div>
 </body>
 </html>

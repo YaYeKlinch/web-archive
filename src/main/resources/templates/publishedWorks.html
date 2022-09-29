@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="/fragments/head :: head"></head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <div class="container">
     <header th:replace="/fragments/navbar :: navbar"></header>
     <form th:action="@{/published-works}">
@@ -40,6 +40,9 @@
                th:class="${pageNumber==works.number + 1} ? active"></a>
         </li>
     </ul>
+</div>
+<div class="container mt-auto">
+    <footer th:replace="/fragments/footer :: footer"></footer>
 </div>
 </body>
 </html>
