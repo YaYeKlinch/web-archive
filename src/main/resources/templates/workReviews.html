@@ -5,8 +5,13 @@
 <body class="d-flex flex-column min-vh-100">
 <div class="container">
     <header th:replace="/fragments/navbar :: navbar"></header>
+    <label th:text="#{title.work}"/>
     <div th:text="${work.title}"></div>
+    <label th:text="#{annotation.work}"/>
     <div th:text="${work.annotation}"></div>
+    <label th:text="#{download.work}"/>
+    <div>  <a th:href="@{|/published-works/${work.id}/${file}|}" th:text="${file}" /></div>
+
 
     <div th:if="${reviewCreated}">
         <a th:text="#{created.review.message}"/>

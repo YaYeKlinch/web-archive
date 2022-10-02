@@ -4,22 +4,24 @@ import com.klishch.diploma.dto.ReviewDto;
 import com.klishch.diploma.entities.Review;
 import com.klishch.diploma.entities.ScientificWork;
 import com.klishch.diploma.entities.User;
+import com.klishch.diploma.services.FileSystemService;
 import com.klishch.diploma.services.ReviewService;
 import com.klishch.diploma.services.ScientificWorkService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @Controller
@@ -28,6 +30,7 @@ public class ReviewController {
 
     ReviewService reviewService;
     ScientificWorkService scientificWorkService;
+    FileSystemService fileSystemService;
 
     @GetMapping("/published-works/{work}")
     public String getWorkPage(@AuthenticationPrincipal User user,
@@ -40,6 +43,7 @@ public class ReviewController {
         model.addAttribute("work",scientificWork);
         model.addAttribute("userId", user.getId());
         model.addAttribute("reviewCreated", isUserCreatedReviewForWork(user,scientificWork));
+        model.addAttribute("file", getFileName(scientificWork));
         Sort sort = ControllerUtils.getSort(sortBy , nameBy , model);
         Page<Review> reviews = reviewService.findReviewsByWorkPageable(page, size, sort, scientificWork);
         int totalPages = reviews.getTotalPages();
@@ -109,8 +113,21 @@ public class ReviewController {
         return "redirect:/published-works/{work}";
     }
 
+    @GetMapping("/published-works/{work}/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+
+        Resource file = fileSystemService.loadAsResource(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
     private boolean isUserCreatedReviewForWork(User user, ScientificWork work){
         return reviewService.findReviewsByWork(work).stream()
                 .anyMatch(review -> review.getUser().getId().equals(user.getId()));
+    }
+
+    private String getFileName(ScientificWork scientificWork){
+            return Paths.get(scientificWork.getFilePath()).getFileName().toString();
     }
 }

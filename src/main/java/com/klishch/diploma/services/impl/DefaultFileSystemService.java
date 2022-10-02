@@ -4,12 +4,14 @@ import com.klishch.diploma.constants.StorageProperties;
 import com.klishch.diploma.exceptions.UploadFileException;
 import com.klishch.diploma.services.FileSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -49,6 +51,29 @@ public class DefaultFileSystemService implements FileSystemService {
 
     }
 
+    @Override
+    public Path load(String filename) {
+        return root.resolve(filename);
+    }
+
+    @Override
+    public Resource loadAsResource(String filename) {
+        try {
+            Path file = load(filename);
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            }
+            else {
+                throw new UploadFileException(
+                        "Could not read file: " + filename);
+
+            }
+        }
+        catch (MalformedURLException e) {
+            throw new UploadFileException("Could not read file: " + filename, e);
+        }
+    }
     @Override
     public void init() {
         try {
