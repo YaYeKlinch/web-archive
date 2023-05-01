@@ -10,16 +10,17 @@
   <div th:if="${param.logout}" >
     <a th:text="#{logout.text}" class="row justify-content-center"></a>
   </div>
+  <label th:text="#{login.text }" class="row justify-content-center "></label>
   <form th:action="@{/login}" method="post" class="col-lg-6 offset-lg-3 ">
     <div class="row justify-content-center">
       <label th:text="#{userName.text}" />
       <input class="form-control" type="text" name="username"/>
       <label th:text="#{password.text}" />
       <input class="form-control" type="password" name="password"/>
-    <div><button class="btn" type="submit"  th:text="#{signIn.button}"></button></div>
+    <div><button class="btn btn-success" type="submit"  th:text="#{signIn.button}"></button>
+      <a class=" btn btn-outline-primary " href="/registration" th:text="#{addNewUser.text}"></a></div>
     </div>
   </form>
-  <a class="row justify-content-center" href="/registration" th:text="#{addNewUser.text}"></a>
 </div>
 </body>
 </html>
